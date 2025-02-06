@@ -10,4 +10,8 @@ public class ProductController {
     public String products(){
         return "products";
     }
+    @GetMapping("/api")
+    public String api(){
+        return "index";
+    }
 }

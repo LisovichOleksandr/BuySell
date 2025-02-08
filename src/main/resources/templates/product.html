@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Product Details</title>
+  <title>Product Info</title>
   <style>
     body {
         font-family: Arial, sans-serif;
@@ -18,11 +18,11 @@
         background-color: white;
         border-radius: 10px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
     }
     .product-title {
         font-size: 2em;
         color: #004c8c; /* приглушенный синий */
-        text-align: center;
         margin-bottom: 10px;
     }
     .product-info {
@@ -40,13 +40,11 @@
         font-size: 1.5em;
         color: #28a745; /* зеленый цвет */
         font-weight: bold;
-        text-align: center;
         margin-bottom: 20px;
     }
     .product-author, .product-city {
         font-size: 1em;
         color: #5c6c79; /* приглушенный серо-синий */
-        text-align: center;
     }
     .field-label {
         font-weight: bold;
@@ -59,18 +57,50 @@
         color: #004c8c;
         text-decoration: none;
         border-radius: 5px;
-        text-align: center;
         font-weight: bold;
         transition: background-color 0.3s ease;
     }
     .back-button:hover {
         background-color: #7bb8d3;
     }
+    .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    .submit-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #ff4c4c; /* красный */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    .submit-button:hover {
+        background-color: #d43f3f;
+        transform: scale(1.05);
+    }
+    .submit-button:active {
+        background-color: #b13232;
+    }
   </style>
 </head>
 <body>
 <div class="product-container">
   <h1 class="product-title" th:text="${product.title}">Product Title</h1>
+
+  <div class="product-card" th:each="image : ${images}">
+      <img th:if="${#strings.isEmpty(image) == false}"
+             th:src="@{'/images/' + ${image.id}}"
+             height="60px"/><br>
+  </div>
   <div class="product-info">
     <p><span class="field-label">Цена:</span> <span th:text="${product.price}">Price: $99.99</span></p>
     <p><span class="field-label">Автор:</span> <span th:text="${product.author}">John Doe</span></p>
@@ -80,6 +110,11 @@
     <p><span class="field-label">Описание:</span> <span th:text="${product.description}">Product description goes here.</span></p>
   </div>
   <a href="/" class="back-button">Назад к продуктам</a>
+</div>
+<div class="container">
+  <form th:action="@{/product/delete/{id}(id=${product.id})}" method="post">
+    <button type="submit" class="submit-button">Видалити товар</button>
+  </form>
 </div>
 </body>
 </html>

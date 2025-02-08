@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f8ff; /* светлый пастельный фон */
+            background-color: #f0f8ff;
             margin: 0;
             padding: 0;
         }
@@ -25,6 +25,8 @@
             overflow: hidden;
             width: 250px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+            padding-bottom: 15px;
         }
         .product-card:hover {
             transform: translateY(-10px);
@@ -33,16 +35,15 @@
         .product-card b {
             display: block;
             font-size: 1.2em;
-            color: #004c8c; /* приглушенный синий */
-            padding: 15px;
-            background-color: #e1effc; /* светло-голубой фон */
             color: #004c8c;
+            padding: 15px;
+            background-color: #e1effc;
             text-align: center;
             border-bottom: 2px solid #c7d9f0;
         }
         .product-card p {
             font-size: 1em;
-            color: #5c6c79; /* приглушенный серо-синий */
+            color: #5c6c79;
             padding: 10px 15px;
             margin: 0;
             text-align: center;
@@ -51,29 +52,133 @@
             display: block;
             padding: 10px;
             text-align: center;
-            background-color: #a2c9f1; /* светлый синий */
-            color: #004c8c; /* темно-синий */
+            background-color: #a2c9f1;
+            color: #004c8c;
             text-decoration: none;
-            border-radius: 0 0 8px 8px;
+            border-radius: 5px;
             font-weight: bold;
             transition: background-color 0.3s ease, transform 0.3s ease;
+            margin: 10px auto;
+            width: 80%;
         }
         .product-card a:hover {
-            background-color: #7bb8d3; /* более насыщенный синий */
-            transform: scale(1.05); /* немного увеличиваем размер при наведении */
+            background-color: #7bb8d3;
+            transform: scale(1.05);
         }
         .product-card a:active {
-            background-color: #5f92b2; /* еще более насыщенный синий при нажатии */
+            background-color: #5f92b2;
+        }
+        .delete-button {
+            display: block;
+            width: 80%;
+            margin: 10px auto;
+            padding: 10px;
+            background-color: #ff4c4c;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+        }
+        .delete-button:hover {
+            background-color: #d43f3f;
+            transform: scale(1.05);
+        }
+        .delete-button:active {
+            background-color: #b13232;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .submit-button {
+            display: block;
+            width: fit-content;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background-color: #a2c9f1;
+            color: #004c8c;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+        }
+        .submit-button:hover {
+            background-color: #7bb8d3;
         }
     </style>
 </head>
 <body>
-<div class="product-container" th:each="product : ${products}">
-    <div class="product-card">
+
+<div class="container">
+    <h3>Пошук</h3>
+    <form th:action="@{/}" method="get">
+        <div class="form-group">
+            <input type="text" name="title" placeholder="Пошук товару по назві" required>
+        </div>
+        <button type="submit" class="submit-button">Добавить товар</button>
+    </form>
+</div>
+
+<div class="product-container">
+    <div class="product-card" th:each="product : ${products}">
         <b th:text="${product.title}">Product Title</b>
         <p th:text="${product.price}">Product Price</p>
-        <a th:href="@{/product/{id}(id=${product.id})}">View Details</a>
+         <a th:href="@{/product/{id}(id=${product.id})}">View Details</a>
+        <form th:action="@{/product/delete/{id}(id=${product.id})}" method="post">
+            <button type="submit" class="delete-button">Удалить товар</button>
+        </form>
     </div>
+</div>
+<div class="container">
+    <h3>Создать новое объявление</h3>
+    <form th:action="@{/product/create}" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <input type="text" name="title" placeholder="Название объявления" required>
+        </div>
+        <div class="form-group">
+            <input type="text" name="description" placeholder="Описание" required>
+        </div>
+        <div class="form-group">
+            <input type="text" name="city" placeholder="Город" required>
+        </div>
+        <div class="form-group">
+            <input type="text" name="author" placeholder="Автор" required>
+        </div>
+        <div class="form-group">
+            <input type="number" name="price" placeholder="Цена" required>
+        </div>
+        <div class="form-group">
+            <input type="file" name="file1" placeholder="Main Photo" required>
+        </div>
+        <div class="form-group">
+            <input type="file" name="file2" placeholder="Photo #2" required>
+        </div>
+        <div class="form-group">
+            <input type="file" name="file3" placeholder="Photo #3" required>
+        </div>
+        <button type="submit" class="submit-button">Добавить товар</button>
+    </form>
 </div>
 </body>
 </html>
